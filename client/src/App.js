@@ -1,9 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Outlet } from 'react-router-dom';
 import io from 'socket.io-client';
+import Main from './views/Main';
+import Chat from './components/Chat';
 
-const Home = () => {
-  return( <div className="container text-center text-warning mt-4"><h1 className="display-6">welcome to the site</h1></div> )
+const Header = () => {
+  return(
+    <>
+      <div className="container text-center mt-4 p-2 border border-0 rounded bg-light text-dark ">
+        <h1 className="display-4">MERN Chat</h1>
+      </div>
+      <Outlet />
+    </>
+  )
 }
 
 const BadLink = () => {
@@ -11,28 +20,14 @@ const BadLink = () => {
 }
 
 function App() {
-  const [ socket ] = useState(() => io(':8000'));
-
-  useEffect(() => {
-    console.log("Is this running?");
-    socket.on("Welcome", data => console.log(data));
-    return () => socket.disconnect(true);
-  }, []);
-
   return (
-    <div className="App">
-      <h1>Socket Test</h1>
-    </div>
-    
-    // <div className="container">
-    //   <Routes>
-    //     <Route path='/' element={<Navigation />}>
-    //       <Route index element={<Home />} />
-    //       <Route path='*' element={<BadLink />} />
-    //     </Route>
-    //   </Routes>
-      
-    // </div>
+      <Routes>
+        <Route path='/' element={<Header />}>
+          <Route index element={<Main />} />
+          <Route path='/chat/:chatName' element={<Chat />} />
+          <Route path='*' element={<BadLink />} />
+        </Route>
+      </Routes>
   );
 }
 

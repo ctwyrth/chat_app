@@ -1,26 +1,23 @@
 const express = require('express');
 const app = express();
-const port = 8000;
-
-const cors = require('cors');
-
-require('./server/config/mongoose.config')
-
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-require('./server/routes/person.routes')(app);
-
-app.listen(port, () => console.log(`Listening on port: ${port}`));
+const http = require('http');
+const server = http.createServer(app);
 
 const io = require('socket.io')(server, { cors: true });
 
-io.on("connection", socket => {
-   console.log("Nice to meet you. (shake hand)");
-   socket.emit("Welcome", "This has been a complicated hand shake!");
-
-   socket.on("event_from_client", data => {
-      socket.broadcast.emit("send_data_to_all_other_clients", data)
+io.on("connection", (socket) => {
+   socket.on('message', (data) => {
+      io.emit('message', data);
+      console.log(data);
    });
 });
+
+server.listen(4000, () =>
+   console.log("The server is running on port 4000.")
+);
+// http.listen(4000, () => console.log(`Listening on port: 4000`));
+
+
+// socket.on('message', ({name, message}) => {
+//    io.emit('message', {name, message})
+// })
