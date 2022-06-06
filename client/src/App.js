@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
-import io from 'socket.io-client';
 import Main from './views/Main';
 import Chat from './components/Chat';
 
 const Header = () => {
   return(
     <>
-      <div className="container text-center mt-4 p-2 border border-0 rounded bg-light text-dark ">
+      <div className="container text-center mt-4 p-2 border border-0 bg-primary text-dark ">
         <h1 className="display-4">MERN Chat</h1>
       </div>
       <Outlet />
